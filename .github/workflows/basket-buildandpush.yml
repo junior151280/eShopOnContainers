@@ -1,4 +1,4 @@
-name: Build and Push Basket
+name: Build and Release Basket.API
 
 on: workflow_dispatch
 

@@ -33,7 +33,6 @@ jobs:
         context: src
         file: src/Services/Basket/Basket.API/Dockerfile
         tags: |
-          ${{secrets.ACR_URL}}/basket.api:${{ GITHUB.RUN_NUMBER }}
-          ${{secrets.ACR_URL}}/basket.api:latest
+          ${{secrets.ACR_URL}}/eshop/basket.api:linux-latest
         push: true
     

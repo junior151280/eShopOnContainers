@@ -35,4 +35,35 @@ jobs:
         tags: |
           ${{secrets.ACR_URL}}/eshop/basket.api:linux-latest
         push: true
-    
+
+    - name: Upload Kubernetes files
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: k8s
+        path: src\Services\Basket\Basket.API\kubernetes-basket-api.yaml
+        
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: DEV
+    steps:
+      - name: Download k8s artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: k8s
+          path: my-app-artifact
+      
+      # Set the target Azure Kubernetes Service (AKS) cluster. 
+      - name: Deploy set context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.AZ_AKS_NAME }}
+          resource-group: ${{ env.AZ_RG_NAME }}
+
+      # Deploy app to AKS
+      - name: Deploy to k8s
+        uses: azure/k8s-deploy@v1
+        with:
+          manifests: my-app-artifact/kubernetes-basket-api.yaml
+          namespace: default

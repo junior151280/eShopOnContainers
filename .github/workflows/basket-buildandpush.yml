@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v3.0.0
       with:
         name: k8s
-        path: src\Services\Basket\Basket.API\kubernetes-basket-api.yaml
+        path: src/Services/Basket/Basket.API/kubernetes-basket-api.yaml
         
   release:
     needs: build

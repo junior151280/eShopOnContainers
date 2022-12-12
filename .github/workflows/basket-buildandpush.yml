@@ -30,7 +30,7 @@ jobs:
     - name: Build and push Basket.API image
       uses: docker/build-push-action@v2.10.0
       with:
-        context: src/Services/Basket/Basket.API
+        context: src
         file: src/Services/Basket/Basket.API/Dockerfile
         tags: |
           ${{secrets.ACR_URL}}/basket.api:${{ GITHUB.RUN_NUMBER }}

@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: eshop-basket-api
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: basket-api
       release: eshop-basket-api
-  #strategy:
-  #  rollingUpdate:
-  #    maxSurge: 25%
-  #    maxUnavailable: 25%
-  #  type: RollingUpdate
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:

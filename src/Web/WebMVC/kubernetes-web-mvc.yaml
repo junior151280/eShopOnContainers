@@ -8,6 +8,7 @@ spec:
     matchLabels:
       app: webmvc
       release: eshop-webmvc
+      role: _TargetRole_
   strategy:
     rollingUpdate:
       maxSurge: 50%

@@ -25,8 +25,6 @@ spec:
           env:
             - name: MyDbContext
               value: "_ConnString_"
-            - name: ConnectionString
-              value: "_ConnString_"
           ports:
             - name: http
               containerPort: 80

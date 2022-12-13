@@ -23,7 +23,7 @@ spec:
         - name: catalog-api
           image: "creshoponcontainers.azurecr.io/eshop/catalog.api:linux-latest"
           env:
-            - name: MyDbContext
+            - name: ConnectionString
               value: "_ConnString_"
           ports:
             - name: http

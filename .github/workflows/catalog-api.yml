@@ -1,4 +1,4 @@
-name: Build and Release Basket.API
+name: Build and Release Catalog API
 
 on: workflow_dispatch
 
@@ -27,20 +27,20 @@ jobs:
         username: ${{ secrets.ACR_LOGIN }}
         password: ${{ secrets.ACR_PASSWORD }}
     
-    - name: Build and push Basket.API image
+    - name: Build and push Catalog API image
       uses: docker/build-push-action@v2.10.0
       with:
         context: src
-        file: src/Services/Basket/Basket.API/Dockerfile
+        file: src/Services/Catalog/Catalog.API/Dockerfile
         tags: |
-          ${{secrets.ACR_URL}}/eshop/basket.api:linux-latest
+          ${{secrets.ACR_URL}}/eshop/catalog.api:linux-latest
         push: true
 
     - name: Upload Kubernetes files
       uses: actions/upload-artifact@v3.0.0
       with:
         name: k8s
-        path: src/Services/Basket/Basket.API/kubernetes-basket-api.yaml
+        path: src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
         
   release:
     needs: build
@@ -65,5 +65,5 @@ jobs:
       - name: Deploy to k8s
         uses: azure/k8s-deploy@v1
         with:
-          manifests: my-app-artifact/kubernetes-basket-api.yaml
+          manifests: my-app-artifact/kubernetes-catalog-api.yaml
           namespace: default

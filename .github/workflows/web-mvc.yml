@@ -36,11 +36,19 @@ jobs:
           ${{secrets.ACR_URL}}/eshop/webmvc:linux-latest
         push: true
 
+    - name: Replace variables
+      run: |
+        sed -i 's|_ConnString_|${{ secrets.AZURE_SQL_CONNECTION }}|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
+        sed -i 's|_TargetRole_|BLUE|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
+        sed -i 's|_TargetRole_|BLUE|g' src/Web/WebMVC/kubernetes-web-mvc-service.yaml
+
     - name: Upload Kubernetes files
       uses: actions/upload-artifact@v3.0.0
       with:
         name: k8s
-        path: src/Web/WebMVC/kubernetes-web-mvc.yaml
+        path: |
+          src/Web/WebMVC/kubernetes-web-mvc.yaml
+          src/Web/WebMVC/kubernetes-web-mvc-service.yaml
         
   release:
     needs: build
@@ -65,5 +73,7 @@ jobs:
       - name: Deploy to k8s
         uses: azure/k8s-deploy@v1
         with:
-          manifests: my-app-artifact/kubernetes-web-mvc.yaml
+          manifests: |
+            my-app-artifact/kubernetes-web-mvc.yaml
+            my-app-artifact/kubernetes-web-mvc-service.yaml
           namespace: default

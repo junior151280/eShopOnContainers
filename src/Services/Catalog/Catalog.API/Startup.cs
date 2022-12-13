@@ -171,7 +171,7 @@ public static class CustomExtensionMethods
         services.AddEntityFrameworkSqlServer()
             .AddDbContext<CatalogContext>(options =>
         {
-            options.UseSqlServer(configuration["ConnectionString"],
+            options.UseSqlServer(configuration["MyDbContext"],
                                     sqlServerOptionsAction: sqlOptions =>
                                     {
                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);

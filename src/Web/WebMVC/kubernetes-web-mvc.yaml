@@ -26,6 +26,48 @@ spec:
           env:
             - name: MyDbContext
               value: "_ConnString_"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: OrchestratorType
+              value: 'K8S'
+            - name: IsClusterEnv
+              value: 'True'
+            - name: PATH_BASE
+              value: "/webmvc"
+            - name: k8sname
+              value: "eshop-aks"
+            - name: ApplicationInsights__InstrumentationKey
+              valueFrom:
+                configMapKeyRef:
+                  key: all__InstrumentationKey
+            - name: DPConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  key: webmvc__keystore
+            - name: PurchaseUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: internalurls__apigwws
+            - name: ExternalPurchaseUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: urls__apigwws
+            - name: CallBackUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: urls__mvc
+            - name: IdentityUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: urls__IdentityUrl
+            - name : IdentityUrlHC
+              valueFrom:
+                configMapKeyRef:
+                  key: internalurls__identity__hc
+            - name: SignalrHubUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: urls__apigwws
           ports:
             - name: http
               containerPort: 80

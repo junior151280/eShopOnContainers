@@ -35,6 +35,11 @@ jobs:
         tags: |
           ${{secrets.ACR_URL}}/eshop/catalog.api:linux-latest
         push: true
+    
+    - name: Replace variables
+      run: |
+        sqlConnString=${{ secrets.AZURE_SQL_CONNECTION }}
+        sed -i "s|_ConnString_|$sqlConnString|g" src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
 
     - name: Upload Kubernetes files
       uses: actions/upload-artifact@v3.0.0

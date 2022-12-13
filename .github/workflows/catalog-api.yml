@@ -38,9 +38,7 @@ jobs:
     
     - name: Replace variables
       run: |
-        sqlConnString="${{ secrets.AZURE_SQL_CONNECTION }}"
-
-        sed -i 's|_ConnString_|$sqlConnString|g' src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
+        sed -i 's|_ConnString_|${{ secrets.AZURE_SQL_CONNECTION }}|g' src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
 
     - name: Upload Kubernetes files
       uses: actions/upload-artifact@v3.0.0

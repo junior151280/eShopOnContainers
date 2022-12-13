@@ -71,7 +71,7 @@ jobs:
 
       # Deploy app to AKS
       - name: Deploy to k8s
-        uses: azure/k8s-deploy@v1
+        uses: azure/k8s-deploy@v4
         with:
           manifests: my-app-artifact/kubernetes-web-mvc.yaml
           namespace: default

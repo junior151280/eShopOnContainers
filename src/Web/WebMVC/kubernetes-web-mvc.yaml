@@ -23,6 +23,7 @@ spec:
       containers:
         - name: webmvc
           image: "creshoponcontainers.azurecr.io/eshop/webmvc:linux-latest"
+          imagePullPolicy: IfNotPresent
           env:
             - name: MyDbContext
               value: "_ConnString_"
@@ -36,38 +37,46 @@ spec:
               value: "/webmvc"
             - name: k8sname
               value: "eshop-aks"
-            - name: ApplicationInsights__InstrumentationKey
+            - name: "ApplicationInsights__InstrumentationKey"
               valueFrom:
                 configMapKeyRef:
-                  key: all__InstrumentationKey
-            - name: DPConnectionString
+                  key: "all__InstrumentationKey"
+                  name: "cfg-eshop-webmvc"
+            - name: "DPConnectionString"
               valueFrom:
                 configMapKeyRef:
-                  key: webmvc__keystore
+                  key: "webmvc__keystore"
+                  name: "cfg-eshop-webmvc"
             - name: PurchaseUrl
               valueFrom:
                 configMapKeyRef:
-                  key: internalurls__apigwws
+                  key: "internalurls__apigwws"
+                  name: "cfg-eshop-webmvc"
             - name: ExternalPurchaseUrl
               valueFrom:
                 configMapKeyRef:
-                  key: urls__apigwws
+                  key: "urls__apigwws"
+                  name: "cfg-eshop-webmvc"
             - name: CallBackUrl
               valueFrom:
                 configMapKeyRef:
-                  key: urls__mvc
+                  key: "urls__mvc"
+                  name: "cfg-eshop-webmvc"
             - name: IdentityUrl
               valueFrom:
                 configMapKeyRef:
-                  key: urls__IdentityUrl
+                  key: "urls__IdentityUrl"
+                  name: "cfg-eshop-webmvc"
             - name : IdentityUrlHC
               valueFrom:
                 configMapKeyRef:
-                  key: internalurls__identity__hc
+                  key: "internalurls__identity__hc"
+                  name: "cfg-eshop-webmvc"
             - name: SignalrHubUrl
               valueFrom:
                 configMapKeyRef:
-                  key: urls__apigwws
+                  key: "urls__apigwws"
+                  name: "cfg-eshop-webmvc"
           ports:
             - name: http
               containerPort: 80

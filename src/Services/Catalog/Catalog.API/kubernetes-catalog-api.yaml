@@ -18,7 +18,7 @@ spec:
       labels:
         app: catalog-api
         release: eshop-catalog-api
-        role: _TargetRole_
+        #role: _TargetRole_
     spec:
       containers:
         - name: catalog-api

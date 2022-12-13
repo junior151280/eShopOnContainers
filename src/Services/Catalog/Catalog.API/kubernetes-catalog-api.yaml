@@ -8,11 +8,11 @@ spec:
     matchLabels:
       app: catalog-api
       release: eshop-catalog-api
-#  strategy:
-#    rollingUpdate:
-#      maxSurge: 25%
-#      maxUnavailable: 25%
-#    type: RollingUpdate
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -23,6 +23,8 @@ spec:
         - name: catalog-api
           image: "creshoponcontainers.azurecr.io/eshop/catalog.api:linux-latest"
           env:
+            - name: MyDbContext
+              value: "_ConnString_"
             - name: ConnectionString
               value: "_ConnString_"
           ports:

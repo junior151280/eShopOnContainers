@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eshop-webmvc
+  name: eshop-webmvc-_TargetRole_
 spec:
   replicas: 2
   selector:
@@ -18,7 +18,7 @@ spec:
       labels:
         app: webmvc
         release: eshop-webmvc
-        #role: _TargetRole_
+        role: _TargetRole_
     spec:
       containers:
         - name: webmvc

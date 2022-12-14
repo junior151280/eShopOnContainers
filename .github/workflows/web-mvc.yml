@@ -33,6 +33,7 @@ jobs:
         context: src
         file: src/Web/WebMVC/Dockerfile
         tags: |
+          ${{secrets.ACR_URL}}/eshop/webmvc:${{ GITHUB.RUN_NUMBER }}
           ${{secrets.ACR_URL}}/eshop/webmvc:linux-latest
         push: true
 
@@ -41,6 +42,7 @@ jobs:
         sed -i 's|_ConnString_|${{ secrets.AZURE_SQL_CONNECTION }}|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
         sed -i 's|_TargetRole_|green|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
         sed -i 's|_TargetRole_|green|g' src/Web/WebMVC/kubernetes-web-mvc-service.yaml
+        sed -i 's|_ImageTag_|${{ GITHUB.RUN_NUMBER }}|g' src/Web/WebMVC/kubernetes-web-mvc-service.yaml
 
     - name: Upload Kubernetes files
       uses: actions/upload-artifact@v3.0.0

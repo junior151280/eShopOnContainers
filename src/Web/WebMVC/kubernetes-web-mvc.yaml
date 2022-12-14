@@ -23,9 +23,11 @@ spec:
     spec:
       containers:
         - name: webmvc
-          image: "creshoponcontainers.azurecr.io/eshop/webmvc:linux-latest"
+          image: "creshoponcontainers.azurecr.io/eshop/webmvc:_imageTag_"
           imagePullPolicy: IfNotPresent
           env:
+            - name: ConnectionStrings
+              value: "_ConnString_"
             - name: MyDbContext
               value: "_ConnString_"
             - name: ASPNETCORE_ENVIRONMENT

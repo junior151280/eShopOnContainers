@@ -7,7 +7,7 @@ metadata:
     chart: webmvc-0.1.0
     release: eshop-webmvc
     heritage: Helm
-    role: green
+    role: blue
 spec:
   type: ClusterIP
   ports:
@@ -18,4 +18,4 @@ spec:
   selector:
     app: webmvc
     release: eshop-webmvc
-    role: green
+    role: blue

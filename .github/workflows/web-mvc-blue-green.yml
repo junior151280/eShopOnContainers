@@ -78,12 +78,12 @@ jobs:
           az logout
 
           echo "Get current role"
-          current_role="\$(kubectl --kubeconfig kubeconfig get services webmvc --output json | jq -r .spec.selector.role)"
-
+          current_role="$(kubectl --kubeconfig kubeconfig get services webmvc -o=jsonpath='{.spec.selector.role}')"
+          echo "Current role: $current_role"
+          
           echo "Define new role"
-          def newRole = { ->
-              $current_role == 'blue' ? 'green' : 'blue'
-          }
+          [[ $current_role = 'blue' ]] && newRole='green' || newRole='blue'
+          echo "newRole: $newRole"
 
           echo "Replace role in k8s files"
           sed -i 's|_TargetRole_|$newRole|g' src/Web/WebMVC/kubernetes-web-mvc.yaml

@@ -7,8 +7,8 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      image_tag:
-        description: 'Image tag'
+      service_file:
+        description: 'Service file to promote or reject'
         required: true
         type: string
       promote_reject:
@@ -23,7 +23,6 @@ on:
 env:
   RESOURCE_GROUP: 'rg-eShopOnContainers'
   AKS_CLUSTER_NAME: 'aks-eShopOnContainers'
-  ACR_NAME: crdemoeastus
 
 jobs:
   promote_reject:
@@ -31,24 +30,42 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Azure login
-        uses: azure/login@v1
+      - name: Check Services Current Role
+        run: |
+          echo "Login Azure Services"
+          az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" -t "${{ secrets.AZURE_TENANT_ID }}"
+
+          echo "Set Azure Subscription"
+          az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
+          echo "Get credentials for AKS cluster"
+          az aks get-credentials --resource-group "${{ env.AZ_RG_NAME }}" --name "${{ env.AZ_AKS_NAME }}" --admin --file kubeconfig
+
+          echo "Logout Azure Services"
+          az logout
+
+          echo "Get current role"
+          current_role="$(kubectl --kubeconfig kubeconfig get services webmvc -o=jsonpath='{.spec.selector.role}')"
+          echo "Current role: $current_role"
+          
+          echo "Define new role"
+          [[ $current_role = 'blue' ]] && newRole='green' || newRole='blue'
+          echo "newRole: $newRole"
+
+          echo "Replace role in k8s files"
+          sed -i "s|_TargetRole_|$newRole|g" ${{ inputs.service_name }}
+
+      # Set the target Azure Kubernetes Service (AKS) cluster. 
+      - name: Deploy set context
+        uses: azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
-      - name: Set cluster context
-        uses: azure/aks-set-context@v3
-        with:
-          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
-          resource-group: ${{ env.RESOURCE_GROUP }}
-      - name: ACR login
-        run: 'az acr login -n ${{ env.ACR_NAME }}'
+          cluster-name: ${{ env.AZ_AKS_NAME }}
+          resource-group: ${{ env.AZ_RG_NAME }}
 
-      - name: Promote/reject
+      # Deploy app to AKS
+      - name: Deploy to k8s
         uses: azure/k8s-deploy@v4
         with:
-          manifests: |
-            src/k8s/service.yaml
-            src/k8s/deploy.yaml
-          images: '${{ env.ACR_NAME }}.azurecr.io/${{ secrets.repository }}/app:${{ inputs.image_tag }}'
-          strategy: blue-green
-          action: ${{ inputs.promote_reject }}
+          manifests: ${{ inputs.service_name }}
+          namespace: default

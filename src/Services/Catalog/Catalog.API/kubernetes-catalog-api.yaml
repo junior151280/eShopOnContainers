@@ -1,13 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eshop-catalog-api
+  name: eshop-catalog-api-_TargetRole_
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: catalog-api
       release: eshop-catalog-api
+      role: _TargetRole_
   strategy:
     rollingUpdate:
       maxSurge: 50%
@@ -18,14 +19,53 @@ spec:
       labels:
         app: catalog-api
         release: eshop-catalog-api
-        #role: _TargetRole_
+        role: _TargetRole_
     spec:
       containers:
         - name: catalog-api
-          image: "creshoponcontainers.azurecr.io/eshop/catalog.api:linux-latest"
+          image: "creshoponcontainers.azurecr.io/eshop/catalog.api:_ImageTag_"
           env:
+            - name: ConnectionStrings
+              value: "_ConnString_"
             - name: MyDbContext
               value: "_ConnString_"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: OrchestratorType
+              value: 'K8S'
+            - name: PATH_BASE
+              value: "/webmvc"
+            - name: k8sname
+              value: "eshop-aks"
+            - name: PORT
+              value: "80"
+            - name: GRPC_PORT
+              value: "81"
+            - name: PicBaseUrl
+              valueFrom:
+                configMapKeyRef:
+                  key: "catalog__PicBaseUrl"
+                  name: "cfg-eshop-catalog-api"
+            - name: AzureStorageEnabled
+              valueFrom:
+                configMapKeyRef:
+                  key: "catalog__AzureStorageEnabled"
+                  name: "cfg-eshop-catalog-api"
+            - name: ApplicationInsights__InstrumentationKey
+              valueFrom:
+                configMapKeyRef:
+                  key: "all__InstrumentationKey"
+                  name: "cfg-eshop-catalog-api"
+            - name: EventBusConnection
+              valueFrom:
+                configMapKeyRef:
+                  key: "all__EventBusConnection"
+                  name: "cfg-eshop-catalog-api"
+            - name: AzureServiceBusEnabled
+              valueFrom:
+                configMapKeyRef:
+                  key: "all__AzureServiceBusEnabled"
+                  name: "cfg-eshop-catalog-api"
           ports:
             - name: http
               containerPort: 80

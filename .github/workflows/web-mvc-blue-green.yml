@@ -86,8 +86,8 @@ jobs:
           echo "newRole: $newRole"
 
           echo "Replace role in k8s files"
-          sed -i 's|_TargetRole_|$newRole|g' my-app-artifact/kubernetes-web-mvc.yaml
-          sed -i 's|_TargetRole_|$newRole|g' my-app-artifact/kubernetes-web-mvc-service.yaml
+          sed -i "s|_TargetRole_|$newRole|g" my-app-artifact/kubernetes-web-mvc.yaml
+          sed -i "s|_TargetRole_|$newRole|g" my-app-artifact/kubernetes-web-mvc-service.yaml
 
       # Deploy app to AKS
       - name: Deploy to k8s

@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: webmvc
-          image: "creshoponcontainers.azurecr.io/eshop/webmvc:_imageTag_"
+          image: "creshoponcontainers.azurecr.io/eshop/webmvc:_ImageTag_"
           imagePullPolicy: IfNotPresent
           env:
             - name: ConnectionStrings

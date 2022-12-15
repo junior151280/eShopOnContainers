@@ -82,7 +82,7 @@ services:
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=tcp:sql-eshoponcontainers.database.windows.net,1433;Initial Catalog=CatalogDb;Persist Security Info=False;User ID=leandro;Password=#P@ssw0rd1234#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;}
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=tcp:sql-eshoponcontainers.database.windows.net,1433;Initial Catalog=CatalogDb;Persist Security Info=False;User ID=sqladmin;Password=#P@ssw0rd1234#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;}
       - PicBaseUrl=${ESHOP_STORAGE_CATALOG_URL}
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}

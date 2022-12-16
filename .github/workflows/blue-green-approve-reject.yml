@@ -38,4 +38,5 @@ jobs:
           kubectl --kubeconfig kubeconfig patch service catalog-api-blue -p '"spec": {"selector": {"app": '"$serviceGreen"',"release": "eshop-catalog-api"}}'
 
           echo "Delete deployment old version: $serviceBlue"
-          kubectl delete deployment $serviceBlue
+          kubectl delete deployment "eshop-"$serviceBlue --kubeconfig kubeconfig
+          

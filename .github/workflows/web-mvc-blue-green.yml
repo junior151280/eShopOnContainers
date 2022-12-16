@@ -33,7 +33,6 @@ jobs:
 
     - name: Replace variables
       run: |
-        sed -i 's|_ConnString_|${{ secrets.AZURE_SQL_CONNECTION }}|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
         sed -i 's|_ImageTag_|${{ GITHUB.RUN_NUMBER }}|g' src/Web/WebMVC/kubernetes-web-mvc.yaml
         
     - name: Upload Kubernetes files

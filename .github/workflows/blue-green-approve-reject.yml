@@ -11,14 +11,14 @@ on:
         description: 'Service file to promote or reject'
         required: true
         type: string
-      promote_reject:
-        description: 'Promote or reject'
-        required: true
-        default: reject
-        type: choice
-        options:
-        - reject
-        - promote
+      #promote_reject:
+      #  description: 'Promote or reject'
+      #  required: true
+      #  default: reject
+      #  type: choice
+      #  options:
+      #  - reject
+      #  - promote
 
 env:
   RESOURCE_GROUP: 'rg-eShopOnContainers'

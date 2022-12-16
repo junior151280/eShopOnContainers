@@ -45,12 +45,12 @@ public class CatalogService : ICatalogService
 
         foreach (JsonElement brand  in brands.RootElement.EnumerateArray())
         {
-            //var brandName = brand.GetProperty("brand").ToString() + " - " + brand.GetProperty("description").ToString();
+            var brandName = brand.GetProperty("brand").ToString() + " - " + brand.GetProperty("description").ToString();
             items.Add(new SelectListItem()
             {
                 Value = brand.GetProperty("id").ToString(),
-                Text = brand.GetProperty("brand").ToString()
-                //Text = brandName
+                //Text = brand.GetProperty("brand").ToString()
+                Text = brandName
             });
         }
 

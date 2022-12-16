@@ -25,16 +25,12 @@ spec:
         - name: catalog-api
           image: "creshoponcontainers.azurecr.io/eshop/catalog.api:_ImageTag_"
           env:
-            - name: ConnectionStrings
-              value: "_ConnString_"
-            - name: MyDbContext
-              value: "_ConnString_"
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: OrchestratorType
               value: 'K8S'
             - name: PATH_BASE
-              value: "/webmvc"
+              value: "/catalog-api"
             - name: k8sname
               value: "eshop-aks"
             - name: PORT
@@ -45,6 +41,11 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: "catalog__PicBaseUrl"
+                  name: "cfg-eshop-catalog-api"
+            - name: ConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  key: "catalog__ConnectionString"
                   name: "cfg-eshop-catalog-api"
             - name: AzureStorageEnabled
               valueFrom:
@@ -64,7 +65,7 @@ spec:
             - name: AzureServiceBusEnabled
               valueFrom:
                 configMapKeyRef:
-                  key: "all__AzureServiceBusEnabled"
+                  key: "all__UseAzureServiceBus"
                   name: "cfg-eshop-catalog-api"
           ports:
             - name: http

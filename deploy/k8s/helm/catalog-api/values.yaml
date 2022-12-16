@@ -48,6 +48,8 @@ env:
       value: "80"
     - name: GRPC_PORT
       value: "81"
+    - name: ConnectionString
+      value: "Server=tcp:sql-eshoponcontainers.database.windows.net,1433;Initial Catalog=CatalogDb;Persist Security Info=False;User ID=sqladmin;Password=#P@ssw0rd1234#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 probes:
   liveness:
     path: /liveness

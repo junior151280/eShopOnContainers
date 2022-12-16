@@ -24,9 +24,24 @@ static_resources:
               domains:
               - ["*"]
               routes:
-              - name: "c-short"
+              - name: "c-short-green"
                 match:
                   prefix: "/c/"
+                  headers:
+                  - name: x-match-header
+                    string_match:
+                      exact: "green"
+                route:
+                  auto_host_rewrite: true
+                  prefix_rewrite: "/catalog-api/"
+                  cluster: catalog
+              - name: "c-short-blue"
+                match:
+                  prefix: "/c/"
+                  headers:
+                  - name: x-match-header
+                    string_match:
+                      exact: "blue"
                 route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/catalog-api/"
@@ -96,7 +111,7 @@ static_resources:
               socket_address:
                 address: webshoppingagg
                 port_value: 80
-  - name: catalog
+  - name: catalog-blue
     connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
@@ -107,7 +122,20 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: catalog-api
+                address: catalog-api-blue
+                port_value: 80
+  - name: catalog-green
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    load_assignment:
+      cluster_name: catalog
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: catalog-api-green
                 port_value: 80
   - name: basket
     connect_timeout: 0.25s

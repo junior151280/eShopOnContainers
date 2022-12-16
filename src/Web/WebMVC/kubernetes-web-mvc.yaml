@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eshop-webmvc-_TargetRole_
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: webmvc
@@ -26,10 +26,6 @@ spec:
           image: "creshoponcontainers.azurecr.io/eshop/webmvc:_ImageTag_"
           imagePullPolicy: IfNotPresent
           env:
-            - name: ConnectionStrings
-              value: "_ConnString_"
-            - name: MyDbContext
-              value: "_ConnString_"
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: OrchestratorType

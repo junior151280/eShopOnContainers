@@ -6,9 +6,9 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: catalog-api
+      app: catalog-api-_ImageTag_
       release: eshop-catalog-api
-      role: _TargetRole_
+
   strategy:
     rollingUpdate:
       maxSurge: 50%
@@ -17,9 +17,8 @@ spec:
   template:
     metadata:
       labels:
-        app: catalog-api
+        app: catalog-api-_ImageTag_
         release: eshop-catalog-api
-        role: _TargetRole_
     spec:
       containers:
         - name: catalog-api

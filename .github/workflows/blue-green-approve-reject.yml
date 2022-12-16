@@ -61,11 +61,11 @@ jobs:
           echo "newRole: $newRole"
 
           echo "Replace role in k8s files"
-          sed -i "s|_TargetRole_|$newRole|g" ${{ inputs.service_name }}
+          sed -i "s|_TargetRole_|$newRole|g" src/Web/WebMVC/kubernetes-web-mvc-service.yaml
 
       # Deploy app to AKS
       - name: Deploy to k8s
         uses: azure/k8s-deploy@v4
         with:
-          manifests: ${{ inputs.service_name }}
+          manifests: src/Web/WebMVC/kubernetes-web-mvc-service.yaml
           namespace: default

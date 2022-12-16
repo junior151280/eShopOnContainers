@@ -30,7 +30,7 @@ jobs:
           az logout
 
           echo "Get current Build Number"
-          greenDeployment="$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')" 
+          greenDeployment="\$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')" 
           echo "greenDeployment: $greenDeployment"
 
           echo "buildNumber=$greenDeployment" >> $GITHUB_ENV

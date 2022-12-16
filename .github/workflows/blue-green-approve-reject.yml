@@ -10,6 +10,7 @@ on:
 env:
   AZ_RG_NAME: 'rg-eShopOnContainers'
   AZ_AKS_NAME: 'aks-eShopOnContainers'
+  buildNumber: 'catalog-api-22'
 
 jobs:
   promote_version:

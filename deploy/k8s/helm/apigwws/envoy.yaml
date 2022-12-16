@@ -24,6 +24,13 @@ static_resources:
               domains:
               - ["*"]
               routes:
+              - name: "c-short"
+                match:
+                  prefix: "/c/"
+                route:
+                  auto_host_rewrite: true
+                  prefix_rewrite: "/catalog-api/"
+                  cluster: catalog
               - name: "c-short-green"
                 match:
                   prefix: "/c/"
@@ -34,7 +41,7 @@ static_resources:
                 route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/catalog-api/"
-                  cluster: catalog
+                  cluster: catalog-green
               - name: "c-short-blue"
                 match:
                   prefix: "/c/"
@@ -45,13 +52,25 @@ static_resources:
                 route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/catalog-api/"
-                  cluster: catalog
+                  cluster: catalog-blue
               - name: "c-long"
                 match:
                   prefix: "/catalog-api/"
                 route:
                   auto_host_rewrite: true
                   cluster: catalog
+              - name: "c-long-blue"
+                match:
+                  prefix: "/catalog-api/"
+                route:
+                  auto_host_rewrite: true
+                  cluster: catalog-blue
+              - name: "c-long-green"
+                match:
+                  prefix: "/catalog-api/"
+                route:
+                  auto_host_rewrite: true
+                  cluster: catalog-green
               - name: "o-short"
                 match:
                   prefix: "/o/"
@@ -111,12 +130,25 @@ static_resources:
               socket_address:
                 address: webshoppingagg
                 port_value: 80
-  - name: catalog-blue
+  - name: catalog
     connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
     load_assignment:
       cluster_name: catalog
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: catalog-api
+                port_value: 80
+  - name: catalog-blue
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    load_assignment:
+      cluster_name: catalog-blue
       endpoints:
       - lb_endpoints:
         - endpoint:
@@ -129,7 +161,7 @@ static_resources:
     type: strict_dns
     lb_policy: round_robin
     load_assignment:
-      cluster_name: catalog
+      cluster_name: catalog-green
       endpoints:
       - lb_endpoints:
         - endpoint:

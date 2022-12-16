@@ -15,7 +15,7 @@ jobs:
   promote_version:
     runs-on: ubuntu-latest
     steps:
-      - name: Promote Green to Blue 
+      - name: Promote Green To Blue
         run: |
           echo "Login Azure Services"
           az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" -t "${{ secrets.AZURE_TENANT_ID }}"
@@ -30,6 +30,7 @@ jobs:
           az logout
 
           echo "Get current Build Number"
-          echo greenDeployment="$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')" >> $GITHUB_ENV
+          echo "greenDeployment=\"$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')\"" >> $GITHUB_ENV
           
+          echo "greenDeployment: ${{ env.greenDeployment }}"
           kubectl --kubeconfig kubeconfig patch service catalog-api-blue -p '"spec": {"selector": {"app": "${{ env.greenDeployment }}","release": "eshop-catalog-api"}}'

@@ -30,7 +30,7 @@ jobs:
           az logout
 
           echo "Get current Build Number"
-          echo "greenDeployment=\"$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')\"" >> $GITHUB_ENV
+          echo "greenDeployment=$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')" >> $GITHUB_ENV
           
           echo "greenDeployment: ${{ env.greenDeployment }}"
           kubectl --kubeconfig kubeconfig patch service catalog-api-blue -p '"spec": {"selector": {"app": "${{ env.greenDeployment }}","release": "eshop-catalog-api"}}'

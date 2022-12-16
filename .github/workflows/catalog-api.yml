@@ -39,7 +39,6 @@ jobs:
     
     - name: Replace variables
       run: |
-        sed -i 's|_ConnString_|${{ secrets.AZURE_SQL_CONNECTION }}|g' src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
         sed -i 's|_ImageTag_|${{ GITHUB.RUN_NUMBER }}|g' src/Services/Catalog/Catalog.API/kubernetes-catalog-api.yaml
 
     - name: Upload Kubernetes files
@@ -67,7 +66,14 @@ jobs:
           cluster-name: ${{ env.AZ_AKS_NAME }}
           resource-group: ${{ env.AZ_RG_NAME }}
 
-      - name: Check Services Current Role
+      # Deploy app to AKS
+      - name: Deploy to k8s
+        uses: azure/k8s-deploy@v1
+        with:
+          manifests: my-app-artifact/kubernetes-catalog-api.yaml
+          namespace: default
+
+      - name: Update Green Service
         run: |
           echo "Login Azure Services"
           az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" -t "${{ secrets.AZURE_TENANT_ID }}"
@@ -81,20 +87,4 @@ jobs:
           echo "Logout Azure Services"
           az logout
 
-          echo "Get current role"
-          current_role="$(kubectl --kubeconfig kubeconfig get services webmvc -o=jsonpath='{.spec.selector.role}')"
-          echo "Current role: $current_role"
-          
-          echo "Define new role"
-          [[ $current_role = 'blue' ]] && newRole='green' || newRole='blue'
-          echo "newRole: $newRole"
-
-          echo "Replace role in k8s files"
-          sed -i "s|_TargetRole_|$newRole|g" my-app-artifact/kubernetes-catalog-api.yaml
-
-      # Deploy app to AKS
-      - name: Deploy to k8s
-        uses: azure/k8s-deploy@v1
-        with:
-          manifests: my-app-artifact/kubernetes-catalog-api.yaml
-          namespace: default
+          kubectl patch service catalog-api-green -p '"spec": {"selector": {"app": "catalog-api-${{ GITHUB.RUN_NUMBER }}","release": "eshop-catalog-api"}}'

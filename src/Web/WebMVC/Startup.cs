@@ -20,9 +20,11 @@ public class Startup
             .AddDevspaces()
             .AddHttpClientServices(Configuration);
 
+
         IdentityModelEventSource.ShowPII = true;       // Caution! Do NOT use in production: https://aka.ms/IdentityModel/PII
 
         services.AddCustomAuthentication(Configuration);
+        services.AddHttpContextAccessor();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

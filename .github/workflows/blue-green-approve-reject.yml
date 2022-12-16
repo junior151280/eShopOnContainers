@@ -30,6 +30,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Set the target Azure Kubernetes Service (AKS) cluster. 
+      - name: Deploy set context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.AZ_AKS_NAME }}
+          resource-group: ${{ env.AZ_RG_NAME }}
+
       - name: Check Services Current Role
         run: |
           echo "Login Azure Services"
@@ -54,14 +62,6 @@ jobs:
 
           echo "Replace role in k8s files"
           sed -i "s|_TargetRole_|$newRole|g" ${{ inputs.service_name }}
-
-      # Set the target Azure Kubernetes Service (AKS) cluster. 
-      - name: Deploy set context
-        uses: azure/aks-set-context@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          cluster-name: ${{ env.AZ_AKS_NAME }}
-          resource-group: ${{ env.AZ_RG_NAME }}
 
       # Deploy app to AKS
       - name: Deploy to k8s

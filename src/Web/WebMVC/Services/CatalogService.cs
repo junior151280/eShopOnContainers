@@ -8,12 +8,17 @@ public class CatalogService : ICatalogService
 
     private readonly string _remoteServiceBaseUrl;
 
-    public CatalogService(HttpClient httpClient, ILogger<CatalogService> logger, IOptions<AppSettings> settings)
+    public CatalogService(HttpClient httpClient, ILogger<CatalogService> logger, IOptions<AppSettings> settings, IHttpContextAccessor accessor)
     {
         _httpClient = httpClient;
         _settings = settings;
         _logger = logger;
 
+        if (accessor.HttpContext.Request.Query.TryGetValue("x-blue-green", out var xBlueGreen) && xBlueGreen.Count == 1)
+        {
+            _httpClient.DefaultRequestHeaders.Add("x-blue-green", xBlueGreen[0]);
+        }
+        
         _remoteServiceBaseUrl = $"{_settings.Value.PurchaseUrl}/c/api/v1/catalog/";
     }
 

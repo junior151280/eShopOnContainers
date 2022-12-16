@@ -10,7 +10,7 @@ on:
 env:
   AZ_RG_NAME: 'rg-eShopOnContainers'
   AZ_AKS_NAME: 'aks-eShopOnContainers'
-  buildNumber: 'catalog-api-22'
+  serviceGreen: 'catalog-api-22'
 
 jobs:
   promote_version:
@@ -31,8 +31,11 @@ jobs:
           az logout
 
           echo "Get current Build Number"
-          buildNumber="$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')"
+          serviceGreen="$(kubectl --kubeconfig kubeconfig get services catalog-api-green -o=jsonpath='{.spec.selector.app}')"
+          serviceBlue="$(kubectl --kubeconfig kubeconfig get services catalog-api-blue -o=jsonpath='{.spec.selector.app}')"
+         
+          echo "Promote serviceGreen: $serviceGreen To serviceBlue: $serviceBlue"
+          kubectl --kubeconfig kubeconfig patch service catalog-api-blue -p '"spec": {"selector": {"app": '"$serviceGreen"',"release": "eshop-catalog-api"}}'
 
-          echo "buildNumber: $buildNumber"
-          
-          kubectl --kubeconfig kubeconfig patch service catalog-api-blue -p '"spec": {"selector": {"app": '"$buildNumber"',"release": "eshop-catalog-api"}}'
+          echo "Delete deployment old version: $serviceBlue"
+          kubectl delete deployment $serviceBlue

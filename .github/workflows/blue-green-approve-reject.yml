@@ -21,8 +21,8 @@ on:
       #  - promote
 
 env:
-  RESOURCE_GROUP: 'rg-eShopOnContainers'
-  AKS_CLUSTER_NAME: 'aks-eShopOnContainers'
+  AZ_RG_NAME: 'rg-eShopOnContainers'
+  AZ_AKS_NAME: 'aks-eShopOnContainers'
 
 jobs:
   promote_reject:
